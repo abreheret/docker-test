@@ -23,6 +23,7 @@ RUN sudo wget https://cmake.org/files/v3.11/cmake-3.11.0-rc1-Linux-x86_64.sh \
 RUN sudo apt-add-repository --yes ppa:beineri/opt-qt591-trusty && sudo apt-get update -y && sudo apt-get install -qq qt59base qt59script qt59tools && export CMAKE_PREFIX_PATH=/opt/qt59
 
 #clone PixelAnnotationTool
+#COPY ./share /
 CMD ["build_pixel_annoation.sh"]
 
 

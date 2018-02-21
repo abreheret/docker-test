@@ -1,0 +1,40 @@
+FROM ubuntu:14.04
+LABEL maintainer="abreheret@gmail.com"
+
+# set PROXY MINES
+RUN echo 'Acquire::http::proxy "http://www-proxy.ensmp.fr:8080";' >> /etc/apt/apt.conf.d/01proxy
+RUN echo 'Acquire::https::proxy "http://www-proxy.ensmp.fr:8080";' >> /etc/apt/apt.conf.d/01proxy
+ENV http_proxy http://www-proxy.ensmp.fr:8080
+ENV https_proxy http://www-proxy.ensmp.fr:8080
+
+# Install required packages
+RUN apt-get update -q \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+      wget \
+      nano \
+      git \
+      gcc \
+      freeglut3-dev \
+      g++ \
+      make \
+      libopencv-dev \
+      software-properties-common
+
+# Install cmake
+RUN sudo wget https://cmake.org/files/v3.11/cmake-3.11.0-rc1-Linux-x86_64.sh -e use_proxy=yes -e https_proxy=www-proxy.ensmp.fr:8080 \
+    && sudo chmod +x cmake-3.11.0-rc1-Linux-x86_64.sh \
+    && sudo ./cmake-3.11.0-rc1-Linux-x86_64.sh --skip-license -yg
+      
+# Install Qt5.9
+RUN sudo -E add-apt-repository --yes ppa:beineri/opt-qt591-trusty && sudo apt-get update -y && sudo apt-get install -qq qt59base qt59script qt59tools && export CMAKE_PREFIX_PATH=/opt/qt59
+
+# PixelAnnotationTool Script to build
+COPY build_pat.sh /build_pat.sh
+RUN chmod +x /build_pat.sh
+CMD ["./build_pat.sh"]
+
+## > docker build -f Dockerfile-proxy -t abreheret:pat .
+## > docker run -ti --rm abreheret:pat /bin/bash ./build_pat.sh
+## > docker run -ti --rm -v //D/Dev/git/docker-test/pat/shared:/root abreheret:pat /bin/bash ./build_pat.sh
+
+

@@ -12,7 +12,10 @@ RUN apt-get update -q \
       g++ \
       make \
       libopencv-dev \
-      software-properties-common
+      software-properties-common \
+	  libfuse-dev \
+	  fuse \
+	  curl
 
 # Install cmake
 RUN sudo wget https://cmake.org/files/v3.11/cmake-3.11.0-rc1-Linux-x86_64.sh \

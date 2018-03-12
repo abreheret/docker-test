@@ -6,3 +6,4 @@ mkdir build
 cd build
 cmake ../PixelAnnotationTool -G"Unix Makefiles" -DCMAKE_BUILD_TYPE=Release
 cmake --build . --config Release
+cmake --build . --config Release --target upload_file
